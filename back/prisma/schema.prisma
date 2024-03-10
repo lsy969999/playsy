@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Sample {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+
+enum RegistType {
+  EMAIL
+  KAKAO
+  GOOGLE
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum UserStatus {
+  OK
+}
+
+model User {
+  userSn Int @id @default(autoincrement())
+  name String
+  nickName String
+  imageURL String?
+  role UserRole @default(USER)
+  email String
+  password String?
+  registType RegistType
+  userStatue UserStatus @default(OK)
+  providerId String?
+
+  isDeleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Token {
+  tokenSn Int @id @default(autoincrement())
+  tokenHash String
+
+  isDeleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
