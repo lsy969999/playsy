@@ -6,6 +6,7 @@ import * as awsx from "@pulumi/awsx";
 const config = new pulumi.Config();
 const instanceType = config.get("instanceType") || "t3.medium";
 const vpcNetworkCidr = config.get("vpcNetworkCidr") || "10.0.0.0/16";
+const domainName = config.get("domainName") || "playsy.xyz"
 
 // 우분투 22.04 amd64 사용
 const ubuntu = aws.ec2.getAmi({
@@ -33,7 +34,7 @@ const vpc = new aws.ec2.Vpc("vpc", {
 // internet gateway. 생성
 const gateway = new aws.ec2.InternetGateway("gateway", {vpcId: vpc.id});
 
-// 새 인스턴스에 퍼블릭 IP 주소를 자동으로 할당하는 서브넷을 생성합니다.
+// 새 인스턴스에 퍼블릭 IP 주소를 자동으로 할당하는 서브넷을 생성
 const subnet = new aws.ec2.Subnet("subnet", {
   vpcId: vpc.id,
   cidrBlock: "10.0.1.0/24",
@@ -81,13 +82,27 @@ const secGroup = new aws.ec2.SecurityGroup("secGroup", {
   }],
 });
 
-// User data to start a HTTP server in the EC2 instance
+// 도커 설치
 const userData = `#!/bin/bash
 echo "Hello, World from Pulumi!" > Hello.txt
+
+apt update
+
+apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y
+
+apt-get update
+
+apt-get install docker-ce docker-ce-cli containerd.io -y
+
+docker run -d --name webserver -p 80:80 nginx:latest
 `;
 
 // 키페어 생성
-const keyPair = new aws.ec2.KeyPair("my-keypair", {
+const keyPair = new aws.ec2.KeyPair("id_rsa", {
   publicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDAyt1DOExy7EdIqNGF5PBz7tPZFkVHwN/R/7U3+PCc8Rdb9oGnGmuSufwswycogB5ktDsbInil3DgHHWyZrLL+71bQCZivyRpHS+N2wFOtykhH5fgKzbu+51lsdK8dDPUTsquCc5awgGQjuAsiX5ZrUH55j6VQ6yZVa+jRVOOnpNPkgWcLmCB5gC2beDbj1DCn/O/vKPDoC7B32/sjQhRYitYzaqYDhq42iVbISCSrOGSlAGMor4Lvpbsyf7yNFaHVoxKNqLa/dCYuk5G7kRG8spkZOY+XNuP2YWj26/lDxWrdQxJVJV5X3/dKvugKwFZ18IxpA8qG5VVE+4x6jh7qXc5nQiDJ2hhNMzQudgm/hHb5ujmZc3Sf6rgE3poySvRolfMR8fh12aa+aGd4X5yfp+UHY7RrnTj+XxiYqwKHzLHLkUaAL4whfhpxG1bC5X6Uefp0pBM+/Pti4CPn3pU94s7QgfHbMJ19WBamY3Sq2FcoD0LJFzxbq5om84RRI9c= syl@SYui-MacBookPro.local", // Replace this with your actual SSH public key
 });
 
@@ -104,9 +119,31 @@ const server = new aws.ec2.Instance("playsy", {
   },
 });
 
+// 엘라스틱 아이피 할당
+let webEip = new aws.ec2.Eip("playsy-eip", {
+  instance: server.id,
+  vpc: true,
+})
+
+// route 53
+const hostedZone = new aws.route53.Zone("playsy-hosted-zone", {
+  name: domainName
+})
+
+// route 53
+const aRecord = new aws.route53.Record("my-a-record", {
+  zoneId: hostedZone.zoneId,
+  name: domainName,
+  type: "A",
+  ttl: 300,
+  records: [ webEip.publicIp ]
+})
+
 // 변수 export
 export const keyPairName = keyPair.keyName;
 export const keyPairId = keyPair.id;
 export const ip = server.publicIp;
 export const hostname = server.publicDns;
 export const url = pulumi.interpolate`http://${server.publicDns}`;
+export const eip_address = webEip.publicIp;
+export const serverUrn = server.urn;
