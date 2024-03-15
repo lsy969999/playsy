@@ -1,12 +1,12 @@
 # version: '3.8'
-name: pg
+name: playsy-green
 networks:
   server-connection:
     external: true
     name: playsy_server-connection
 
 services:
-  front-green:
+  front:
     build: ./front
     networks:
       - server-connection
@@ -18,7 +18,7 @@ services:
       PROFILE: ${PROFILE:-DEV}
     scale: 2
   
-  back-green:
+  back:
     build: ./back
     networks:
       - server-connection
