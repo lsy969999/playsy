@@ -13,6 +13,8 @@ COPY . .
 
 RUN npm run build
 
+RUN npx prisma generate
+
 # 애플리케이션 실행
 # CMD ["pm2-runtime", "start", "ecosystem.config.cjs"]
 CMD ["npm", "run", "start:prod"]

@@ -104,7 +104,7 @@ apt-get update
 
 apt-get install docker-ce docker-ce-cli containerd.io -y
 
-docker run -d --name webserver -p 80:80 nginx:latest
+apt-get install docker-compose -y
 `;
 
 // 키페어 생성
