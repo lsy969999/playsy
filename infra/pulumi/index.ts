@@ -88,25 +88,28 @@ const secGroup = new aws.ec2.SecurityGroup("secGroup", {
   }],
 });
 
-// 도커 설치
+// ec2 초기화
 const userData = `#!/bin/bash
 echo "Hello, World from Pulumi!" > Hello.txt
 
 apt update
 
+# 도커 설치
 apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
-
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y
-
 apt-get update
-
 apt-get install docker-ce docker-ce-cli containerd.io -y
 
+# 도커컴포즈 설치
 apt-get install docker-compose -y
 
+# npm 설치
 apt-get install npm -y
+
+# timezone 변경 to kst
+sudo rm /etc/localtime
+sudo ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 `;
 
 // 키페어 생성
