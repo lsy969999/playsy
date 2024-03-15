@@ -4,7 +4,7 @@ const Layout = () => {
   return (
     <div>
       <nav>
-        Playsy!
+        Playsy!11
       </nav>
       <main>
         <Outlet/>

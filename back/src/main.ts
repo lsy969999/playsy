@@ -44,6 +44,29 @@ async function bootstrap() {
     }),
   });
 
+  // cors 허용
+  const allowedOrigins = [
+    'https://playsy.xyz',
+    'http://playsy.xyz',
+    'http://local.playsy.xyz',
+    'http://localhost:5173',
+  ];
+  app.enableCors({
+    origin: function (origin, callback) {
+      // origin이 허용된 도메인 중 하나인지 확인
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    preflightContinue: false,
+    credentials: true,
+    optionsSuccessStatus: 204,
+    allowedHeaders: 'Content-Type, Accept',
+  });
+
   const configService = app.get(ConfigService);
   const serverPort = configService.get('app.SERVER_PORT');
 
