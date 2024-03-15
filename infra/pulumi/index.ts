@@ -102,18 +102,21 @@ apt-get update
 apt-get install docker-ce docker-ce-cli containerd.io -y
 
 # 도커컴포즈 설치
-apt-get install jq
+apt-get install jq -y
 VERSION=$(curl --silent https://api.github.com/repos/docker/compose/releases/latest | jq .name -r)
 DESTINATION=/usr/bin/docker-compose
-sudo curl -L https://github.com/docker/compose/releases/download/$VERSION/docker-compose-$(uname -s)-$(uname -m) -o $DESTINATION
-sudo chmod 755 $DESTINATION
+curl -L https://github.com/docker/compose/releases/download/$VERSION/docker-compose-$(uname -s)-$(uname -m) -o $DESTINATION
+chmod 755 $DESTINATION
+
+# nginx 설치
+apt-get install nginx
 
 # npm 설치
 apt-get install npm -y
 
 # timezone 변경 to kst
-sudo rm /etc/localtime
-sudo ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+rm /etc/localtime
+ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 `;
 
 // 키페어 생성

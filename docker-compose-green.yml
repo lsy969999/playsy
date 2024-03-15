@@ -1,15 +1,30 @@
 # version: '3.8'
-name: playsy-green
+name: playsy_green
+
 networks:
-  server-connection:
-    external: true
-    name: playsy_server-connection
+  server-green-connection:
+    driver: bridge
 
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 3001:80
+    volumes:
+      # .env에서 NGINX_ENV_CONF 를 읽어와 dev or prd conf 를 결정한다.
+      - ./nginx/nginx${NGINX_ENV_CONF}.conf:/etc/nginx/nginx.conf
+    networks:
+      - server-green-connection
+    environment:
+      TZ: Asia/Seoul
+    depends_on:
+      - front
+      - back
+
   front:
     build: ./front
     networks:
-      - server-connection
+      - server-green-connection
     ports:
       - 8080
     environment:
@@ -21,7 +36,7 @@ services:
   back:
     build: ./back
     networks:
-      - server-connection
+      - server-green-connection
     ports:
       - 7080
     environment:
