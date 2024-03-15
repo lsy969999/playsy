@@ -1,31 +1,14 @@
 version: '3.8'
 
 networks:
-  server-connection-one:
+  server-connection:
     driver: bridge
 
 services:
-  nginx:
-    image: nginx:latest
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      # .env에서 NGINX_ENV_CONF 를 읽어와 dev or prd conf 를 결정한다.
-      - ./nginx/nginx${NGINX_ENV_CONF}.conf:/etc/nginx/nginx.conf
-      - /etc/letsencrypt:/etc/letsencrypt
-    networks:
-      - server-connection-one
-    environment:
-      TZ: Asia/Seoul
-    depends_on:
-      - front
-      - back
-
-  front:
+  front-green:
     build: ./front
     networks:
-      - server-connection-one
+      - server-connection
     ports:
       - 8080
     environment:
@@ -34,10 +17,10 @@ services:
       PROFILE: ${PROFILE:-DEV}
     scale: 2
   
-  back:
+  back-green:
     build: ./back
     networks:
-      - server-connection-one
+      - server-connection
     ports:
       - 7080
     environment:

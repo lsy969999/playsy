@@ -7,3 +7,22 @@ dev의경우
 NGINX_ENV_CONF=.dev
 넣어주자
 ```
+
+수동 배포
+```bash
+docker-compose -f docker-compose-blue.yml up -d
+
+docker-compose -f docker-compose-nginx.yml up -d
+
+docker-compose -f docker-compose-green.yml up -d
+
+conf upstream 바꾸기
+
+docker exec playsy-nginx-1 service nginx reload
+
+docker-compose -f docker-compose-green.yml down
+
+docker-compose -f docker-compose-blue.yml down
+
+docker-compose -f docker-compose-nginx.yml down
+```
