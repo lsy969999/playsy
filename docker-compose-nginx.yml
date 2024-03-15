@@ -1,5 +1,5 @@
 version: '3.8'
-
+name: pn
 networks:
   server-connection:
     external: true
@@ -19,6 +19,3 @@ services:
       - server-connection
     environment:
       TZ: Asia/Seoul
-    # depends_on:
-    #   - front
-    #   - back

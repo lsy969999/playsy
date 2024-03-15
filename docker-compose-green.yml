@@ -1,5 +1,5 @@
 version: '3.8'
-
+name: pg
 networks:
   server-connection:
     external: true
@@ -32,5 +32,5 @@ services:
       SWAGGER_USER: ${SWAGGER_USER}
       SWAGGER_PASSWORD: ${SWAGGER_PASSWORD}
     volumes:
-      - ./logs/back:/app/logs
+      - ./logs/back-green:/app/logs
     scale: 2
