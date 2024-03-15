@@ -11,7 +11,8 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      # .env에서 NGINX_ENV_CONF 를 읽어와 dev or prd conf 를 결정한다.
+      - ./nginx/nginx${NGINX_ENV_CONF}.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt
     networks:
       - server-connection

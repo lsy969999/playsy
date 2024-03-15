@@ -68,6 +68,7 @@ async function bootstrap() {
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
+        Logger.log('origin: ' + origin);
         callback(new Error('Not allowed by CORS'));
       }
     },
