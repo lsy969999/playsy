@@ -15,7 +15,10 @@ blue_line_number=3
 green_line_number=6
 
 # 파일 경로
-nginx_conf="/etc/nginx/conf.d/nginx.host.conf"
+nginx_conf="/etc/nginx/conf.d/"
+
+target_path="/etc/nginx/conf.d/"
+from_path="/home/ubuntu/playsy/nginx/"
 
 # BLUE GREEN 둘다 없으면 BLUE 켜줌
 if [ -z "$IS_BLUE" ] && [ -z "$IS_GREEN" ]; then
@@ -27,11 +30,13 @@ if [ -z "$IS_BLUE" ] && [ -z "$IS_GREEN" ]; then
 
     # GREEN
     # 주석 처리하기
-    sed -i "" "${green_line_number}s/^\([^#]\)/# \1/" $nginx_conf
+    # sed -i "" "${green_line_number}s/^\([^#]\)/# \1/" $nginx_conf
 
     # BLUE
     # 주석 해제하기
-    sed -i "" "${blue_line_number}s/^# //" $nginx_conf
+    # sed -i "" "${blue_line_number}s/^# //" $nginx_conf
+
+    cp "${from_path}nginx.host.blue.conf" $target_path
 
 # DEPLOY_TARGET이 BLUE가 비어 있으면 BLUE를 배포한다.
 elif [ -z "$IS_BLUE" ]; then
@@ -43,11 +48,13 @@ elif [ -z "$IS_BLUE" ]; then
 
     # GREEN
     # 주석 처리하기
-    sed -i "" "${green_line_number}s/^\([^#]\)/# \1/" $nginx_conf
+    # sed -i "" "${green_line_number}s/^\([^#]\)/# \1/" $nginx_conf
 
     # BLUE
     # 주석 해제하기
-    sed -i "" "${blue_line_number}s/^# //" $nginx_conf
+    # sed -i "" "${blue_line_number}s/^# //" $nginx_conf
+
+    cp "${from_path}nginx.host.blue.conf" $target_path
 
     echo 'call: systemctl reload nginx && docker-compose -f docker-compose-green.yml down';
 
@@ -61,11 +68,13 @@ elif [ -z "$IS_GREEN" ]; then
 
     # BLUE
     # 주석 처리하기
-    sed -i "" "${blue_line_number}s/^\([^#]\)/# \1/" $nginx_conf
+    # sed -i "" "${blue_line_number}s/^\([^#]\)/# \1/" $nginx_conf
 
     # GREEN
     # 주석 해제하기
-    sed -i "" "${green_line_number}s/^# //" $nginx_conf
+    # sed -i "" "${green_line_number}s/^# //" $nginx_conf
+
+    cp "${from_path}nginx.host.green.conf" $target_path
 
     echo 'call: systemctl reload nginx && docker-compose -f docker-compose-blue.yml down';
 else 
