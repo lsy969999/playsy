@@ -8,8 +8,18 @@ NGINX_ENV_CONF=.dev
 넣어주자
 ```
 
-수동 배포
+```
+
+docker-compose up -d
+
+```
+
+수동 블루그린 배포
 ```bash
+# 이거 해주어야함
+docker network create playsy_server-connection
+
+
 docker-compose -f docker-compose-blue.yml up -d
 
 docker-compose -f docker-compose-nginx.yml up -d
@@ -18,11 +28,11 @@ docker-compose -f docker-compose-green.yml up -d
 
 conf upstream 바꾸기
 
-docker exec playsy-nginx-1 service nginx reload
+docker exec playsy_nginx_1 service nginx reload
 
-docker-compose -f docker-compose-green.yml down
+docker-compose -f docker-compose-green.yml down --remove-orphans
 
-docker-compose -f docker-compose-blue.yml down
+docker-compose -f docker-compose-blue.yml down --remove-orphans
 
-docker-compose -f docker-compose-nginx.yml down
+docker-compose -f docker-compose-nginx.yml down --remove-orphans
 ```
