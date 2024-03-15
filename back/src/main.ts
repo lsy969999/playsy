@@ -65,11 +65,10 @@ async function bootstrap() {
   app.enableCors({
     origin: function (origin, callback) {
       // origin이 허용된 도메인 중 하나인지 확인
-      Logger.log('origin: ' + origin);
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
-        // Logger.log('origin: ' + origin);
+        Logger.log('origin: ' + origin);
         callback(new Error('Not allowed by CORS'));
       }
     },
