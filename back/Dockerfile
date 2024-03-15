@@ -11,9 +11,10 @@ RUN npm install
 # 소스 코드 복사
 COPY . .
 
+RUN npx prisma generate
+
 RUN npm run build
 
-RUN npx prisma generate
 
 # 애플리케이션 실행
 # CMD ["pm2-runtime", "start", "ecosystem.config.cjs"]
