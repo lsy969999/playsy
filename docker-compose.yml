@@ -1,5 +1,5 @@
 version: '3.8'
-name: xplaysy_one
+name: x-playsy_one
 
 networks:
   server-connection-one:

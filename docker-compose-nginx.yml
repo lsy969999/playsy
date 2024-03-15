@@ -1,5 +1,5 @@
 version: '3.8'
-name: xpn
+name: x-pn
 networks:
   server-connection:
     external: true
