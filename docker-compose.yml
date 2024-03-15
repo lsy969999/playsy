@@ -49,5 +49,5 @@ services:
       SWAGGER_USER: ${SWAGGER_USER}
       SWAGGER_PASSWORD: ${SWAGGER_PASSWORD}
     volumes:
-      - ./logs/back:/app/logs
+      - ./logs/back-one:/app/logs
     scale: 2
