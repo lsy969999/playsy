@@ -1,5 +1,5 @@
 ```bash
-서버에서
+root .env 파일에
 BACK_DATABASE_URL
 환경변수 넣어줘야 한다.
 ```
