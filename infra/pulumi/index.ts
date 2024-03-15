@@ -68,10 +68,16 @@ const secGroup = new aws.ec2.SecurityGroup("secGroup", {
       cidrBlocks: ["0.0.0.0/0"],
     },
     {
-    fromPort: 22,
-    toPort: 22,
-    protocol: "tcp",
-    cidrBlocks: ["39.115.9.165/32"],
+      fromPort: 443,
+      toPort: 443,
+      protocol: "tcp",
+      cidrBlocks: ["0.0.0.0/0"],
+    },
+    {
+      fromPort: 22,
+      toPort: 22,
+      protocol: "tcp",
+      cidrBlocks: ["39.115.9.165/32"],
     }
   ],
   egress: [{
@@ -133,7 +139,7 @@ const hostedZone = new aws.route53.Zone("playsy-hosted-zone", {
 // route 53
 const aRecord = new aws.route53.Record("my-a-record", {
   zoneId: hostedZone.zoneId,
-  name: domainName,
+  name: "api." + domainName,
   type: "A",
   ttl: 300,
   records: [ webEip.publicIp ]
