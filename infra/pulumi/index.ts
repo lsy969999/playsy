@@ -105,6 +105,8 @@ apt-get update
 apt-get install docker-ce docker-ce-cli containerd.io -y
 
 apt-get install docker-compose -y
+
+apt-get install npm -y
 `;
 
 // 키페어 생성
@@ -139,11 +141,21 @@ const hostedZone = new aws.route53.Zone("playsy-hosted-zone", {
 // route 53
 const aRecord = new aws.route53.Record("my-a-record", {
   zoneId: hostedZone.zoneId,
-  name: "api." + domainName,
+  name: domainName,
   type: "A",
   ttl: 300,
   records: [ webEip.publicIp ]
 })
+
+// route 53
+const apiRecord = new aws.route53.Record("my-api-record", {
+  zoneId: hostedZone.zoneId,
+  name: `api.${domainName}`,
+  type: "A",
+  ttl: 300,
+  records: [ webEip.publicIp ]
+})
+
 
 // 변수 export
 export const keyPairName = keyPair.keyName;
