@@ -8,7 +8,7 @@ export class SampleService {
 
   async getAllSample() {
     const samples = await this.prisma.sample.findMany();
-    this.logger.log(`samples length is ${samples.length}`);
+    this.logger.log(`samples length is ${samples.length}!`);
     return samples;
   }
 }

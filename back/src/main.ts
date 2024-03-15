@@ -12,6 +12,17 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as windstonDaily from 'winston-daily-rotate-file';
+import { v4 as uuidv4 } from 'uuid';
+
+function generateShortUUID(): string {
+  // UUID 생성
+  const fullUUID: string = uuidv4();
+  // 처음 8자리만 선택하여 반환
+  const shortUUID: string = fullUUID.substring(0, 8);
+  return shortUUID;
+}
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: WinstonModule.createLogger({
@@ -26,20 +37,20 @@ async function bootstrap() {
             }),
           ),
         }),
-        // new windstonDaily({
-        //   level: 'debug',
-        //   datePattern: 'YYYY-MM-DD',
-        //   dirname: __dirname + '/../logs',
-        //   filename: 'app.log.%DATE%',
-        //   maxFiles: 30,
-        //   zippedArchive: true,
-        //   format: winston.format.combine(
-        //     winston.format.timestamp(),
-        //     utilities.format.nestLike('Nest', {
-        //       prettyPrint: true,
-        //     }),
-        //   ),
-        // }),
+        new windstonDaily({
+          level: 'info',
+          datePattern: 'YYYY-MM-DD',
+          dirname: __dirname + '/../logs',
+          filename: 'app.log.%DATE%',
+          maxFiles: 30,
+          zippedArchive: true,
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            utilities.format.nestLike(`Nest-${generateShortUUID()}`, {
+              prettyPrint: true,
+            }),
+          ),
+        }),
       ],
     }),
   });

@@ -1,3 +1,5 @@
+// pm2 미사용 전환
+
 // eslint-disable-next-line no-undef
 module.exports = {
   apps : [

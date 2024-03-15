@@ -9,7 +9,7 @@ COPY package.json .
 RUN npm install
 
 # 의존성 설치
-RUN npm install -g pm2
+# RUN npm install -g pm2
 RUN npm install -g serve
 
 # 소스 코드 복사
@@ -17,8 +17,6 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 8080
-EXPOSE 8081
-
 # 애플리케이션 실행
-CMD ["pm2-runtime", "start", "ecosystem.config.cjs"]
+# CMD ["pm2-runtime", "start", "ecosystem.config.cjs"]
+CMD ["sh", "start.sh"]

@@ -1,4 +1,9 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 
 @Injectable()
@@ -9,6 +14,7 @@ export class PrismaService
   >
   implements OnModuleInit, OnModuleDestroy
 {
+  private logger = new Logger(PrismaService.name);
   constructor() {
     super({
       log: [
@@ -20,7 +26,7 @@ export class PrismaService
     });
 
     this.$on('query', (event) => {
-      console.log(event);
+      this.logger.debug(event);
     });
   }
 
