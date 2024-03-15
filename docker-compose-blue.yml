@@ -1,5 +1,5 @@
-version: '3.8'
-name: x-pb
+# version: '3.8'
+name: pb
 networks:
   server-connection:
     external: true

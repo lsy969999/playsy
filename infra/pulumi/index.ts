@@ -102,7 +102,11 @@ apt-get update
 apt-get install docker-ce docker-ce-cli containerd.io -y
 
 # 도커컴포즈 설치
-apt-get install docker-compose -y
+apt-get install jq
+VERSION=$(curl --silent https://api.github.com/repos/docker/compose/releases/latest | jq .name -r)
+DESTINATION=/usr/bin/docker-compose
+sudo curl -L https://github.com/docker/compose/releases/download/${VERSION}/docker-compose-$(uname -s)-$(uname -m) -o $DESTINATION
+sudo chmod 755 $DESTINATION
 
 # npm 설치
 apt-get install npm -y
