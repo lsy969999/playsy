@@ -45,6 +45,8 @@ services:
       SERVER_PORT: 7080
       TZ: Asia/Seoul
       PROFILE: ${PROFILE:-DEV}
+      SWAGGER_USER: ${SWAGGER_USER}
+      SWAGGER_PASSWORD: ${SWAGGER_PASSWORD}
     volumes:
       - ./logs/back:/app/logs
     scale: 2
