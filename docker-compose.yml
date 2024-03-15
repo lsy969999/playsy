@@ -31,6 +31,7 @@ services:
     environment:
       SERVER_PORT: 8080
       TZ: Asia/Seoul
+      PROFILE: ${PROFILE:-DEV}
     scale: 2
   
   back:
@@ -43,6 +44,7 @@ services:
       DATABASE_URL: ${BACK_DATABASE_URL}
       SERVER_PORT: 7080
       TZ: Asia/Seoul
+      PROFILE: ${PROFILE:-DEV}
     volumes:
       - ./logs/back:/app/logs
     scale: 2

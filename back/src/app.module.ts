@@ -7,12 +7,13 @@ import { ConfigModule } from '@nestjs/config';
 import { SampleModule } from './sample/sample.module';
 import jwtConfig from './config/jwt.config';
 import appConfig from './config/app.config';
+import swaggerConfig from './config/swagger.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [jwtConfig, appConfig],
+      load: [jwtConfig, appConfig, swaggerConfig],
     }),
     PrismaModule,
     AdminModule,

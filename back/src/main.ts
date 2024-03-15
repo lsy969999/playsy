@@ -14,6 +14,7 @@ import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as windstonDaily from 'winston-daily-rotate-file';
 import { v4 as uuidv4 } from 'uuid';
+import * as basicAuth from 'express-basic-auth';
 
 function generateShortUUID(): string {
   // UUID 생성
@@ -84,6 +85,17 @@ async function bootstrap() {
 
   //cookie
   app.use(cookieParser());
+
+  app.use(
+    ['/docs', '/docs-json'],
+    basicAuth({
+      challenge: true,
+      users: {
+        [configService.get('swagger.user')]:
+          configService.get('swagger.password'),
+      },
+    }),
+  );
 
   //swagger
   const config = new DocumentBuilder()
