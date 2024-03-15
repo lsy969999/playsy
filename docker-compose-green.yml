@@ -1,5 +1,5 @@
-# version: '3.8'
-name: pg
+version: '3.8'
+name: xpg
 networks:
   server-connection:
     external: true
