@@ -8,18 +8,7 @@ NGINX_ENV_CONF=.dev
 넣어주자
 ```
 
-```
-
-docker-compose up -d
-
-```
-
-수동 블루그린 배포
 ```bash
-# 이거 해주어야함
-docker network create playsy_server-connection
-
-
 docker-compose -f docker-compose-blue.yml up -d
 
 docker-compose -f docker-compose-nginx.yml up -d
@@ -38,6 +27,45 @@ docker-compose -f docker-compose-nginx.yml down
 ```
 
 
+
+deploy blue -> green
+```bash
+# git pull
+git pull
+
+# green deploy
+docker-compose -f docker-compose-green.yml up -d
+
+# nginx blue conf 제거
+rm /etc/nginx/conf.d/nginx.host.blue.conf
+
+# nginx green conf 복사
+cp /home/ubuntu/playsy/nginx/nginx.host.green.conf /etc/nginx/conf.d/
+
+# nginx reload
+systemctl reload nginx
+
+# blue down
+docker-compose -f docker-compose-blue.yml down
 ```
 
+deploy green -> blue
+```bash
+# git pull
+git pull
+
+# blue deploy
+docker-compose -f docker-compose-blue.yml up -d
+
+# nginx green conf 제거
+rm /etc/nginx/conf.d/nginx.host.green.conf
+
+# nginx blue conf 복사
+cp /home/ubuntu/playsy/nginx/nginx.host.blue.conf /etc/nginx/conf.d/
+
+# nginx reload
+systemctl reload nginx
+
+# green down
+docker-compose -f docker-compose-green.yml down
 ```
