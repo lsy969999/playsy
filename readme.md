@@ -11,19 +11,13 @@ NGINX_ENV_CONF=.dev
 ```bash
 docker-compose -f docker-compose-blue.yml up -d
 
-docker-compose -f docker-compose-nginx.yml up -d
-
 docker-compose -f docker-compose-green.yml up -d
 
 conf upstream 바꾸기
 
-docker exec playsy_nginx_1 service nginx reload
-
 docker-compose -f docker-compose-green.yml down
 
 docker-compose -f docker-compose-blue.yml down
-
-docker-compose -f docker-compose-nginx.yml down
 ```
 
 
