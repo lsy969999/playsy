@@ -119,6 +119,17 @@ rm /etc/localtime
 ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 `;
 
+// ec2 vol
+const id = new aws.ebs.Volume("id", {
+  availabilityZone: "ap-northeast-2c",
+  iops: 100,
+  size: 10,
+  snapshotId: "snap-0e43c3eefca073953",
+  type: "gp2",
+}, {
+  protect: true,
+});
+
 // 키페어 생성
 const keyPair = new aws.ec2.KeyPair("id_rsa", {
   publicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDAyt1DOExy7EdIqNGF5PBz7tPZFkVHwN/R/7U3+PCc8Rdb9oGnGmuSufwswycogB5ktDsbInil3DgHHWyZrLL+71bQCZivyRpHS+N2wFOtykhH5fgKzbu+51lsdK8dDPUTsquCc5awgGQjuAsiX5ZrUH55j6VQ6yZVa+jRVOOnpNPkgWcLmCB5gC2beDbj1DCn/O/vKPDoC7B32/sjQhRYitYzaqYDhq42iVbISCSrOGSlAGMor4Lvpbsyf7yNFaHVoxKNqLa/dCYuk5G7kRG8spkZOY+XNuP2YWj26/lDxWrdQxJVJV5X3/dKvugKwFZ18IxpA8qG5VVE+4x6jh7qXc5nQiDJ2hhNMzQudgm/hHb5ujmZc3Sf6rgE3poySvRolfMR8fh12aa+aGd4X5yfp+UHY7RrnTj+XxiYqwKHzLHLkUaAL4whfhpxG1bC5X6Uefp0pBM+/Pti4CPn3pU94s7QgfHbMJ19WBamY3Sq2FcoD0LJFzxbq5om84RRI9c= syl@SYui-MacBookPro.local", // Replace this with your actual SSH public key
@@ -140,7 +151,7 @@ const server = new aws.ec2.Instance("playsy", {
 // 엘라스틱 아이피 할당
 let webEip = new aws.ec2.Eip("playsy-eip", {
   instance: server.id,
-  vpc: true,
+  domain: "vpc",
 })
 
 // route 53
@@ -148,7 +159,7 @@ const hostedZone = new aws.route53.Zone("playsy-hosted-zone", {
   name: domainName
 })
 
-// route 53
+// record
 const aRecord = new aws.route53.Record("my-a-record", {
   zoneId: hostedZone.zoneId,
   name: domainName,
@@ -157,7 +168,7 @@ const aRecord = new aws.route53.Record("my-a-record", {
   records: [ webEip.publicIp ]
 })
 
-// route 53
+// record
 const apiRecord = new aws.route53.Record("my-api-record", {
   zoneId: hostedZone.zoneId,
   name: `api.${domainName}`,

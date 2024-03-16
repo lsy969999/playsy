@@ -10,3 +10,8 @@ sudo certbot certonly --standalone  -d playsy.xyz -d api.playsy.xyz
 # 이후 nginx.conf에 80 은 return 301 https://$host$request_uri; 하고, 443 listen serverblock 만든뒤,
 # ssl 속성을 넣어준다. ssl_certificate, ssl_certificate_key, ssl_protocols, ssl_prefer_server_ciphers
 ```
+
+
+```bash
+certbot renew
+```
