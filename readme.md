@@ -20,6 +20,11 @@ docker-compose -f docker-compose-green.yml down
 docker-compose -f docker-compose-blue.yml down
 ```
 
+```bash
+docker-compose -f docker-compose-infra.yml up -d
+docker-compose -f docker-compose-infra.yml down
+```
+
 
 
 deploy blue -> green

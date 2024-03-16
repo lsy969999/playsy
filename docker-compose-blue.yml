@@ -3,7 +3,7 @@ name: playsy_blue
 
 networks:
   server-blue-connection:
-    driver: bridge
+  infra-connection:
 
 services:
   nginx:

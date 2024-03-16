@@ -1,0 +1,14 @@
+name: playsy_infra
+
+networks:
+  infra-connection:
+
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - infra-connection

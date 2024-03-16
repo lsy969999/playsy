@@ -3,7 +3,7 @@ name: playsy_green
 
 networks:
   server-green-connection:
-    driver: bridge
+  infra-connection:
 
 services:
   nginx:
@@ -37,6 +37,7 @@ services:
     build: ./back
     networks:
       - server-green-connection
+      - infra-connection
     ports:
       - 7080
     environment:

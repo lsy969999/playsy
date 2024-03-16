@@ -1,53 +1,53 @@
-# version: '3.8'
-name: playsy_one
+# # version: '3.8'
+# name: playsy_one
 
-networks:
-  server-connection-one:
-    driver: bridge
+# networks:
+#   server-connection-one:
+#     driver: bridge
 
-services:
-  nginx:
-    image: nginx:latest
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      # .env에서 NGINX_ENV_CONF 를 읽어와 dev or prd conf 를 결정한다.
-      - ./nginx/nginx${NGINX_ENV_CONF}.conf:/etc/nginx/nginx.conf
-      - /etc/letsencrypt:/etc/letsencrypt
-    networks:
-      - server-connection-one
-    environment:
-      TZ: Asia/Seoul
-    depends_on:
-      - front
-      - back
+# services:
+#   nginx:
+#     image: nginx:latest
+#     ports:
+#       - 80:80
+#       - 443:443
+#     volumes:
+#       # .env에서 NGINX_ENV_CONF 를 읽어와 dev or prd conf 를 결정한다.
+#       - ./nginx/nginx${NGINX_ENV_CONF}.conf:/etc/nginx/nginx.conf
+#       - /etc/letsencrypt:/etc/letsencrypt
+#     networks:
+#       - server-connection-one
+#     environment:
+#       TZ: Asia/Seoul
+#     depends_on:
+#       - front
+#       - back
 
-  front:
-    build: ./front
-    networks:
-      - server-connection-one
-    ports:
-      - 8080
-    environment:
-      SERVER_PORT: 8080
-      TZ: Asia/Seoul
-      PROFILE: ${PROFILE:-DEV}
-    scale: 2
+#   front:
+#     build: ./front
+#     networks:
+#       - server-connection-one
+#     ports:
+#       - 8080
+#     environment:
+#       SERVER_PORT: 8080
+#       TZ: Asia/Seoul
+#       PROFILE: ${PROFILE:-DEV}
+#     scale: 2
   
-  back:
-    build: ./back
-    networks:
-      - server-connection-one
-    ports:
-      - 7080
-    environment:
-      DATABASE_URL: ${BACK_DATABASE_URL}
-      SERVER_PORT: 7080
-      TZ: Asia/Seoul
-      PROFILE: ${PROFILE:-DEV}
-      SWAGGER_USER: ${SWAGGER_USER}
-      SWAGGER_PASSWORD: ${SWAGGER_PASSWORD}
-    volumes:
-      - ./logs/back-one:/app/logs
-    scale: 2
+#   back:
+#     build: ./back
+#     networks:
+#       - server-connection-one
+#     ports:
+#       - 7080
+#     environment:
+#       DATABASE_URL: ${BACK_DATABASE_URL}
+#       SERVER_PORT: 7080
+#       TZ: Asia/Seoul
+#       PROFILE: ${PROFILE:-DEV}
+#       SWAGGER_USER: ${SWAGGER_USER}
+#       SWAGGER_PASSWORD: ${SWAGGER_PASSWORD}
+#     volumes:
+#       - ./logs/back-one:/app/logs
+#     scale: 2
