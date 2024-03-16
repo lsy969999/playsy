@@ -54,6 +54,7 @@ elif [ -z "$IS_BLUE" ]; then
     # 주석 해제하기
     # sed -i "" "${blue_line_number}s/^# //" $nginx_conf
 
+    rm "${$target_path}nginx.host.green.conf"
     cp "${from_path}nginx.host.blue.conf" $target_path
 
     echo 'call: systemctl reload nginx && docker-compose -f docker-compose-green.yml down';
@@ -74,6 +75,7 @@ elif [ -z "$IS_GREEN" ]; then
     # 주석 해제하기
     # sed -i "" "${green_line_number}s/^# //" $nginx_conf
 
+    rm "${$target_path}nginx.host.blue.conf"
     cp "${from_path}nginx.host.green.conf" $target_path
 
     echo 'call: systemctl reload nginx && docker-compose -f docker-compose-blue.yml down';
